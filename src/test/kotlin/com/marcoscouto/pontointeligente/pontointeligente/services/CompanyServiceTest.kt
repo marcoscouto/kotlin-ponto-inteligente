@@ -32,14 +32,10 @@ class CompanyServiceTest {
     }
 
     @Test
-    fun shouldFindByCnpj() {
-        Assertions.assertNotNull(service?.findByCnpj(CNPJ))
-    }
+    fun shouldFindByCnpj() = Assertions.assertNotNull(service?.findByCnpj(CNPJ))
 
     @Test
-    fun shouldSaveCompany() {
-        Assertions.assertNotNull(service?.save(company()))
-    }
+    fun shouldSaveCompany() = Assertions.assertNotNull(service?.save(company()))
 
     private fun company(): Company = Company("Company", CNPJ, "1")
 
