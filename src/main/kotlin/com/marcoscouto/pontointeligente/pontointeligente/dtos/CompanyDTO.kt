@@ -1,4 +1,4 @@
-package com.marcoscouto.pontointeligente.pontointeligente
+package com.marcoscouto.pontointeligente.pontointeligente.dtos
 
 data class CompanyDTO (
         val name: String,
