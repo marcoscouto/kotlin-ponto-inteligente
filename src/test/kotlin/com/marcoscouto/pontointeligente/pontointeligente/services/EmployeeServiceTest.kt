@@ -43,13 +43,13 @@ class EmployeeServiceTest() {
     fun shouldSave() = Assertions.assertNotNull(service?.save(employee()))
 
     @Test
-    fun shouldFindByCpf() = Assertions.assertNotNull(service?.findByCpf(employee()))
+    fun shouldFindByCpf() = Assertions.assertNotNull(service?.findByCpf(CPF))
 
     @Test
-    fun shouldFindByEmail() = Assertions.assertNotNull(service?.findByEmail(employee()))
+    fun shouldFindByEmail() = Assertions.assertNotNull(service?.findByEmail(EMAIL))
 
     @Test
-    fun shouldFindById() = Assertions.assertNotNull(service?.findById(employee()))
+    fun shouldFindById() = Assertions.assertNotNull(service?.findById(ID))
 
     fun employee() = Employee("Employee", EMAIL, PasswordUtils().generateBCrypt("123"),
             CPF, ProfileEnum.ROLE_USER, "1", 1.0,

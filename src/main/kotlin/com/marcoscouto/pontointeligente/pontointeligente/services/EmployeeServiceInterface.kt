@@ -6,9 +6,9 @@ interface EmployeeServiceInterface {
 
     fun save(employee: Employee): Employee
 
-    fun findByCpf(employee: Employee): Employee?
+    fun findByCpf(cpf: String): Employee?
 
-    fun findByEmail(employee: Employee): Employee?
+    fun findByEmail(email: String): Employee?
 
-    fun findById(employee: Employee): Employee?
+    fun findById(id: String): Employee?
 }
