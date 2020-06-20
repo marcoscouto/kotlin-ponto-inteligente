@@ -55,5 +55,4 @@ class EmployeeServiceTest() {
             CPF, ProfileEnum.ROLE_USER, "1", 1.0,
             1f, 1f, ID)
 
-
 }
