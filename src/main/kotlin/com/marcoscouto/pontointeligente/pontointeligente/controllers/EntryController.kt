@@ -81,13 +81,45 @@ class EntryController(val entryService: EntryService,
         return ResponseEntity.ok(response)
     }
 
+    @PutMapping
+    fun update(@PathVariable("id") id: String, @Valid @RequestBody entryDTO: EntryDTO,
+               result: BindingResult): ResponseEntity<Response<EntryDTO>> {
+
+        val response: Response<EntryDTO> = Response()
+        validateEmployee(entryDTO, result)
+        entryDTO.id = id
+        val entry: Entry = convertDTOforEntry(entryDTO, result)
+
+        if (result.hasErrors()) {
+            for (erro in result.allErrors)
+                erro.defaultMessage?.let { response.errors.add(it) }
+            return ResponseEntity.badRequest().body(response)
+        }
+
+        entryService.save(entry)
+        response.data = convertEntryDTO(entry)
+        return ResponseEntity.ok(response)
+    }
+
+    private fun validateEmployee(entryDTO: EntryDTO, result: BindingResult) {
+        if (entryDTO.employeeId == null) {
+            result.addError(ObjectError("Funcionário",
+                    "Funcionário não informado"))
+            return
+        }
+
+        val employee: Employee? = employeeService.findById(entryDTO.employeeId)
+        if(employee == null)
+            result.addError(ObjectError("Funcionário", "Funcionário não encontrado. Id inexistente."))
+    }
+
     private fun convertEntryDTO(entry: Entry): EntryDTO? =
             EntryDTO(dateFormat.format(entry.date), entry.type.toString(),
                     entry.description, entry.localization, entry.employeeId, entry.id)
 
     private fun convertDTOforEntry(entryDTO: EntryDTO, result: BindingResult): Entry {
         if (entryDTO.id != null) {
-            val entry: Entry? = entryService.findById(entryDTO.id)
+            val entry: Entry? = entryService.findById(entryDTO.id!!)
             if (entry != null)
                 result.addError(ObjectError("Lançamento", "Lançamento não encontrado"))
         }
