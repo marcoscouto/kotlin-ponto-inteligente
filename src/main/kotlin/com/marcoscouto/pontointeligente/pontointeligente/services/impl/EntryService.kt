@@ -19,7 +19,7 @@ class EntryService(val repository: EntryRepository) : EntryServiceInterface {
     override fun save(entry: Entry): Entry? =
             repository.save(entry)
 
-    override fun delete(id: String) {
-        TODO("Not yet implemented")
-    }
+    override fun delete(id: String) =
+            repository.deleteById(id)
+
 }

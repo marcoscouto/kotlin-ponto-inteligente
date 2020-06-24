@@ -102,11 +102,11 @@ class EntryController(val entryService: EntryService,
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable("id") id: String): ResponseEntity<Response<String>>{
+    fun delete(@PathVariable("id") id: String): ResponseEntity<Response<String>> {
         val response: Response<String> = Response()
         val entry: Entry? = entryService.findById(id)
 
-        if(entry == null){
+        if (entry == null) {
             response.errors.add("Erro ao remover lançamento. Registro não encotrado para o id $id")
             return ResponseEntity.badRequest().body(response)
         }
@@ -123,7 +123,7 @@ class EntryController(val entryService: EntryService,
         }
 
         val employee: Employee? = employeeService.findById(entryDTO.employeeId)
-        if(employee == null)
+        if (employee == null)
             result.addError(ObjectError("Funcionário", "Funcionário não encontrado. Id inexistente."))
     }
 
