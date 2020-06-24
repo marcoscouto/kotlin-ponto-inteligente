@@ -9,13 +9,13 @@ import com.marcoscouto.pontointeligente.pontointeligente.response.Response
 import com.marcoscouto.pontointeligente.pontointeligente.services.impl.EmployeeService
 import com.marcoscouto.pontointeligente.pontointeligente.services.impl.EntryService
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.validation.ObjectError
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -49,6 +49,36 @@ class EntryController(val entryService: EntryService,
         response.data = convertEntryDTO(entry)
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{id}")
+    fun findById(@PathVariable("id") id: String): ResponseEntity<Response<EntryDTO>> {
+        val response: Response<EntryDTO> = Response()
+        val entry: Entry? = entryService.findById(id)
+
+        if (entry == null) {
+            response.errors.add("Lançamento não encontrado para o id $id")
+            return ResponseEntity.badRequest().body(response)
+        }
+
+        response.data = convertEntryDTO(entry)
+        return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    fun findByEmployeeId(@PathVariable("employeeId") employeeId: String,
+                         @RequestParam(value = "pag", defaultValue = "0") pag: Int,
+                         @RequestParam(value = "ord", defaultValue = "id") ord: String,
+                         @RequestParam(value = "dir", defaultValue = "DESC") dir: String)
+            : ResponseEntity<Response<Page<EntryDTO>>> {
+
+        val response: Response<Page<EntryDTO>> = Response()
+        val pageRequest: PageRequest = PageRequest.of(pag, qntPerPage, Sort.Direction.valueOf(dir), ord)
+        val entries: Page<Entry> = entryService.findByEmployeeId(employeeId, pageRequest)
+        val entriesDTO: Page<EntryDTO> = entries.map { entry -> convertEntryDTO(entry) }
+
+        response.data = entriesDTO
+        return ResponseEntity.ok(response)
     }
 
     private fun convertEntryDTO(entry: Entry): EntryDTO? =
