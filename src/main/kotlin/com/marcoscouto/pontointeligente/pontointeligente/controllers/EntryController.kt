@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.validation.Valid
 
@@ -51,7 +52,7 @@ class EntryController(val entryService: EntryService,
     }
 
     private fun convertEntryDTO(entry: Entry): EntryDTO? =
-            EntryDTO(dateFormat.format(entry.data), entry.type.toString(),
+            EntryDTO(dateFormat.format(entry.date), entry.type.toString(),
                     entry.description, entry.localization, entry.employeeId, entry.id)
 
     private fun convertDTOforEntry(entryDTO: EntryDTO, result: BindingResult): Entry {
@@ -60,7 +61,7 @@ class EntryController(val entryService: EntryService,
             if (entry != null)
                 result.addError(ObjectError("Lançamento", "Lançamento não encontrado"))
         }
-        return Entry(LocalDate.parse(entryDTO.data, dateFormat), TypeEnum.valueOf(entryDTO.type!!),
+        return Entry(LocalDateTime.parse(entryDTO.date, dateFormat), TypeEnum.valueOf(entryDTO.type!!),
                 entryDTO.employeeId!!, entryDTO.description,
                 entryDTO.localization, entryDTO.id)
     }
