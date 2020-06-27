@@ -45,7 +45,7 @@ class EntryController(val entryService: EntryService,
         }
 
         var entry = convertDTOforEntry(entryDTO, result)
-        entry = entryService.save(entry)!!
+        entry = entryService.save(entry)
         response.data = convertEntryDTO(entry)
 
         return ResponseEntity.ok().body(response);

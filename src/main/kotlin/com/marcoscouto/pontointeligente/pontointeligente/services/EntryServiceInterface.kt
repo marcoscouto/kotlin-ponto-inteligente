@@ -10,7 +10,7 @@ interface EntryServiceInterface {
 
     fun findById(id: String): Entry?
 
-    fun save(entry: Entry): Entry?
+    fun save(entry: Entry): Entry
 
     fun delete(id: String)
 }

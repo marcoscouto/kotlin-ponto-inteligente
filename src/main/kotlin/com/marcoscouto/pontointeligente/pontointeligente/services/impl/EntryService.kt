@@ -16,7 +16,7 @@ class EntryService(val repository: EntryRepository) : EntryServiceInterface {
     override fun findById(id: String): Entry? =
             repository.findById(id).get()
 
-    override fun save(entry: Entry): Entry? =
+    override fun save(entry: Entry): Entry =
             repository.save(entry)
 
     override fun delete(id: String) =
